@@ -20,7 +20,6 @@ import {
   Title,
 } from "chart.js";
 import { Doughnut, Pie, Line } from "react-chartjs-2";
-import faker from "faker";
 
 const Dashboard = () => {
   const pieData = {
@@ -37,11 +36,11 @@ const Dashboard = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top" as const, // Corrected position value
       },
       title: {
         display: true,
-        text: "Houres worked:",
+        text: "Hours worked:",
       },
     },
   };
@@ -61,7 +60,7 @@ const Dashboard = () => {
     datasets: [
       {
         label: "Dataset 1",
-        data: labels.map(() => faker.datatype.number({ min: 1, max: 12 })),
+        data: [8, 7, 9, 6, 8, 7, 10], // Example static data for hours worked
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
