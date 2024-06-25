@@ -9,8 +9,8 @@ export async function login(email: string, password: string) {
   const supabase = createClient();
 
   const data = {
-    email: "user@example.com",
-    password: "password123",
+    email: email,
+    password: password,
   };
 
   const { error } = await supabase.auth.signInWithPassword(data);

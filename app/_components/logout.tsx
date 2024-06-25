@@ -10,10 +10,10 @@ export default function Logout() {
   };
 
   return (
-    <form>
+    <form className="fixed bottom-4 w-64 flex justify-center">
       <button
         formAction={logout}
-        className="text-black transition duration-100 ease-in-out"
+        className="text-white bg-yellow-500 hover:bg-yellow-600 p-3 rounded-md transition duration-100 ease-in-out"
       >
         Logout
       </button>

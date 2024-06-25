@@ -49,7 +49,7 @@ export default function Login() {
     setError(""); // Clear any previous errors
 
     try {
-      await login("admin@gmail.com", "password123");
+      await login(values.username, values.password);
 
       // console.log("Login successful");
       // Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day

@@ -48,6 +48,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [error, setError] = useState("");
+  const [value, setValue] = useState({ email: "", password: "", name: "" });
   const router = useRouter();
 
   const form = useForm({
@@ -68,8 +69,19 @@ export default function Signup() {
     },
   });
 
-  async function onSubmit(values: any) {
-    if (step === 3) {
+  async function onSubmit(
+    values: any
+    //   {
+    //   email?: string;
+    //   password?: string;
+    //   otp?: string;
+    // }
+  ) {
+    if (step === 1) {
+      setValue({ ...value, email: values.email });
+    } else if (step === 2) {
+      setValue({ ...value, password: values.password });
+    } else if (step === 3) {
       if (values.otp !== "000000") {
         setOtpError("Incorrect OTP. Please try again.");
         return;
@@ -77,15 +89,13 @@ export default function Signup() {
         setOtpError("");
       }
     }
-
     if (step < 4) {
       setStep(step + 1);
     } else {
       setLoading(true);
-      // Simulate an async operation and redirect after 4 seconds
       try {
-        await signup(values.username, values.password, values.name);
-
+        await signup(value.email, value.password, values);
+        console.log(values);
         // console.log("Login successful");
         // Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day
         // setLoading(false);
@@ -96,11 +106,11 @@ export default function Signup() {
         setLoading(false);
       }
 
-      setTimeout(() => {
-        console.log(values);
-        setLoading(false);
-        router.push("/"); // Redirect to home page or any other page
-      }, 4000);
+      // setTimeout(() => {
+      //   console.log(values);
+      //   setLoading(false);
+      //   router.push("/"); // Redirect to home page or any other page
+      // }, 4000);
     }
   }
 
