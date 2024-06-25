@@ -1,113 +1,229 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import React from "react";
+import {
+  faChartSimple,
+  faGear,
+  faHouse,
+  faListCheck,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+} from "chart.js";
+import { Doughnut, Pie, Line } from "react-chartjs-2";
+import faker from "faker";
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+const Dashboard = () => {
+  const pieData = {
+    labels: ["Completed", "Pending", "In Progress"],
+    datasets: [
+      {
+        data: [18, 6, 5],
+        backgroundColor: ["#34D399", "#FBBF24", "#3B82F6"],
+      },
+    ],
+  };
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: "Houres worked:",
+      },
+    },
+  };
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+  const labels = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data: labels.map(() => faker.datatype.number({ min: 1, max: 12 })),
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    ArcElement,
+    Tooltip,
+    Legend
   );
-}
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <aside className="w-64 bg-gradient-to-br from-green-400 to-blue-500 p-4 shadow-lg text-white">
+        <div className="flex items-center space-x-4 p-2 mb-5 animate-fade-in">
+          <img
+            className="h-12 w-12 rounded-full"
+            src="https://via.placeholder.com/150"
+            alt="Profile"
+          />
+          <div>
+            <h4 className="font-semibold text-lg">Alex Johnson</h4>
+            <span className="text-sm">alex.johnson@gmail.com</span>
+          </div>
+        </div>
+        <nav className="space-y-2">
+          <a
+            href="#"
+            className="flex items-center p-2 bg-green-500 rounded-md shadow-md hover:bg-green-600 transition duration-300 ease-in-out"
+          >
+            <FontAwesomeIcon icon={faHouse} className="h-6 w-6 mr-3" />
+            Dashboard
+          </a>
+          <a
+            href="#"
+            className="flex items-center p-2 hover:bg-green-600 rounded-md transition duration-300 ease-in-out"
+          >
+            <FontAwesomeIcon icon={faListCheck} className="h-6 w-6 mr-3" />
+            Tasks
+          </a>
+          <a
+            href="#"
+            className="flex items-center p-2 hover:bg-green-600 rounded-md transition duration-300 ease-in-out"
+          >
+            <FontAwesomeIcon icon={faChartSimple} className="h-6 w-6 mr-3" />
+            Statistics
+          </a>
+          <a
+            href="#"
+            className="flex items-center p-2 hover:bg-green-600 rounded-md transition duration-300 ease-in-out"
+          >
+            <FontAwesomeIcon icon={faGear} className="h-6 w-6 mr-3" />
+            Settings
+          </a>
+        </nav>
+      </aside>
+
+      <main className="flex-1 p-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-slide-in-bottom">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Task Overview
+            </h2>
+            <div className="mt-4">
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Total Tasks
+                </div>
+                <div className="text-lg font-medium text-gray-700 dark:text-gray-200">
+                  24
+                </div>
+              </div>
+              <div className="mt-2 flex justify-between items-center">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Completed
+                </div>
+                <div className="text-lg font-medium text-gray-700 dark:text-gray-200">
+                  18
+                </div>
+              </div>
+              <div className="mt-2 flex justify-between items-center">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Pending
+                </div>
+                <div className="text-lg font-medium text-gray-700 dark:text-gray-200">
+                  6
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 col-span-2 animate-slide-in-right">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Last Tasks
+            </h2>
+            <table className="min-w-full mt-4">
+              <thead>
+                <tr>
+                  <th className="py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                    Task
+                  </th>
+                  <th className="py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                    Assignee
+                  </th>
+                  <th className="py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                    Due Date
+                  </th>
+                  <th className="py-2 text-left text-sm text-gray-500 dark:text-gray-400">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="py-2">Design new dashboard</td>
+                  <td className="py-2">Alex Johnson</td>
+                  <td className="py-2">June 25, 2024</td>
+                  <td className="py-2">Completed</td>
+                </tr>
+                <tr>
+                  <td className="py-2">Develop API integration</td>
+                  <td className="py-2">John Doe</td>
+                  <td className="py-2">June 26, 2024</td>
+                  <td className="py-2">Pending</td>
+                </tr>
+                <tr>
+                  <td className="py-2">Write documentation</td>
+                  <td className="py-2">Jane Smith</td>
+                  <td className="py-2">June 27, 2024</td>
+                  <td className="py-2">In Progress</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 animate-slide-in-bottom">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Tasks Share
+            </h2>
+            <div className="mt-4">
+              <Pie data={pieData} />
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 col-span-2 animate-slide-in-right">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              Tasks Schedule
+            </h2>
+            <div className="mt-4">
+              <Line options={options} data={data} />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;

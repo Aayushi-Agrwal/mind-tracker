@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Cookies from "js-cookie"; // Import js-cookie for handling cookies
 
 // Define schema using zod
 const formSchema = z.object({
@@ -27,8 +28,12 @@ const formSchema = z.object({
   }),
 });
 
+const staticUsername = "admin"; // Static username
+const staticPassword = "password123"; // Static password
+
 export default function Login() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
   // Initialize useForm with zod resolver
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,11 +47,23 @@ export default function Login() {
   // Handle form submission
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
+    setError(""); // Clear any previous errors
+
     // Simulate an async operation
     setTimeout(() => {
-      console.log(values);
-      setLoading(false);
-      router.push("/");
+      if (
+        values.username === staticUsername &&
+        values.password === staticPassword
+      ) {
+        console.log("Login successful", values);
+        Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day
+        setLoading(false);
+        router.push("/");
+      } else {
+        console.log("Login failed", values);
+        setError("Invalid username or password");
+        setLoading(false);
+      }
     }, 2000);
   }
 
@@ -111,6 +128,7 @@ export default function Login() {
               Login
             </Button>
           )}
+          {error && <div className="text-red-600 mt-4">{error}</div>}
         </form>
       </Form>
     </div>
