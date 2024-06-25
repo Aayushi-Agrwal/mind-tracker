@@ -1,11 +1,9 @@
-"use client";
-
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Changed from next/navigation
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Cookies from "js-cookie"; // Import js-cookie for handling cookies
+import { login } from "./actions";
 
 // Define schema using zod
 const formSchema = z.object({
@@ -45,26 +44,22 @@ export default function Login() {
   });
 
   // Handle form submission
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     setError(""); // Clear any previous errors
 
-    // Simulate an async operation
-    setTimeout(() => {
-      if (
-        values.username === staticUsername &&
-        values.password === staticPassword
-      ) {
-        console.log("Login successful", values);
-        Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day
-        setLoading(false);
-        router.push("/");
-      } else {
-        console.log("Login failed", values);
-        setError("Invalid username or password");
-        setLoading(false);
-      }
-    }, 2000);
+    try {
+      await login("admin@gmail.com", "password123");
+
+      // console.log("Login successful");
+      // Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day
+      // setLoading(false);
+      // router.push("/");
+    } catch (error) {
+      console.error("Login failed", error);
+      setError("Invalid username or password");
+      setLoading(false);
+    }
   }
 
   return (
@@ -76,14 +71,14 @@ export default function Login() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700 dark:text-gray-300">
+                <FormLabel className="text-gray-700 dark:text-gray-60">
                   Username
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your username"
                     {...field}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 dark:bg-gray-700 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:bg-gray-100 dark:text-gray-800"
                   />
                 </FormControl>
                 <FormMessage />
@@ -95,7 +90,7 @@ export default function Login() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700 dark:text-gray-300">
+                <FormLabel className="text-gray-700 dark:text-gray-600">
                   Password
                 </FormLabel>
                 <FormControl>
@@ -103,7 +98,7 @@ export default function Login() {
                     type="password"
                     placeholder="Enter your password"
                     {...field}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 dark:bg-gray-700 dark:text-gray-200"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:bg-gray-100 dark:text-gray-800"
                   />
                 </FormControl>
                 <FormMessage />
@@ -114,7 +109,7 @@ export default function Login() {
           {loading ? (
             <Button
               disabled
-              className="w-full flex items-center justify-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full flex items-center justify-center px-4 py-2 text-white bg-yellow-600 rounded-md hover:bg-inyellowdigo-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Loading
@@ -122,7 +117,7 @@ export default function Login() {
           ) : (
             <Button
               type="submit"
-              className="w-full flex items-center justify-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full flex items-center justify-center px-4 py-2 text-white bg-yellow-600 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               disabled={loading}
             >
               Login

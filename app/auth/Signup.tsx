@@ -22,6 +22,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { signup } from "./actions";
 
 // Define schemas for each step
 const emailSchema = z.object({
@@ -46,6 +47,7 @@ export default function Signup() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const form = useForm({
@@ -66,7 +68,7 @@ export default function Signup() {
     },
   });
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
     if (step === 3) {
       if (values.otp !== "000000") {
         setOtpError("Incorrect OTP. Please try again.");
@@ -81,6 +83,19 @@ export default function Signup() {
     } else {
       setLoading(true);
       // Simulate an async operation and redirect after 4 seconds
+      try {
+        await signup(values.username, values.password, values.name);
+
+        // console.log("Login successful");
+        // Cookies.set("auth-token", "authenticated", { expires: 1 }); // Set cookie for 1 day
+        // setLoading(false);
+        // router.push("/");
+      } catch (error) {
+        console.error("Login failed", error);
+        setError("Invalid username or password");
+        setLoading(false);
+      }
+
       setTimeout(() => {
         console.log(values);
         setLoading(false);
@@ -97,7 +112,7 @@ export default function Signup() {
       <div className="mb-8">
         <Progress
           value={currentProgress}
-          className="mb-2 text-md [&>*]:bg-indigo-600 bg-slate-200"
+          className="mb-2 text-md [&>*]:bg-yellow-600 bg-slate-200"
         />
         <span className="text-sm">Step {step} of 4</span>
       </div>
@@ -110,14 +125,14 @@ export default function Signup() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">
+                  <FormLabel className="text-gray-700 dark:text-gray-600">
                     Email
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
                       {...field}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 dark:bg-gray-700 dark:text-gray-200"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:bg-gray-100 dark:text-gray-800"
                     />
                   </FormControl>
                   <FormMessage />
@@ -131,7 +146,7 @@ export default function Signup() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">
+                  <FormLabel className="text-gray-700 dark:text-gray-600">
                     Password
                   </FormLabel>
                   <FormControl>
@@ -139,7 +154,7 @@ export default function Signup() {
                       type="password"
                       placeholder="Enter your password"
                       {...field}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 dark:bg-gray-700 dark:text-gray-200"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:bg-gray-100 dark:text-gray-800"
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,12 +168,12 @@ export default function Signup() {
               name="otp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">
+                  <FormLabel className="text-gray-700 dark:text-gray-600">
                     Enter OTP sent to your email
                   </FormLabel>
                   <FormControl>
                     <InputOTP maxLength={6} {...field}>
-                      <InputOTPGroup className="flex w-full justify-around">
+                      <InputOTPGroup className="flex w-full justify-around dark:text-gray-700">
                         <InputOTPSlot
                           index={0}
                           className="border border-slate-200"
@@ -200,14 +215,14 @@ export default function Signup() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 dark:text-gray-300">
+                  <FormLabel className="text-gray-700 dark:text-gray-600">
                     Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your name"
                       {...field}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 dark:bg-gray-700 dark:text-gray-200"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 dark:focus:ring-yellow-600 dark:bg-gray-100 dark:text-gray-800"
                     />
                   </FormControl>
                   <FormMessage />
@@ -218,7 +233,7 @@ export default function Signup() {
           {loading ? (
             <Button
               disabled
-              className="w-full flex items-center justify-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full flex items-center justify-center px-4 py-2 text-white bg-yellow-600 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Loading
@@ -226,7 +241,7 @@ export default function Signup() {
           ) : (
             <Button
               type="submit"
-              className="w-full flex items-center justify-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full flex items-center justify-center px-4 py-2 text-white bg-yellow-600 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               disabled={loading}
             >
               {step < 4 ? "Next" : "Signup"}
